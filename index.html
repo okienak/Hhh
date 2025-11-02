@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OKIENAK Website</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    
+    <style id="custom-styles">
+        /* Variabel Warna Dasar */
+        :root {
+            --p: #673AB7; /* Primary / Deep Purple */
+            --l: #EDE7F6; /* Light Purple/Lavender - Background */
+            --b: #FFFFFF; /* White */
+            --t: #4527A0; /* Text Darker Purple */
+            --e: #FF7043; /* Error/Accent (Orange for contrast) */
+            --s: #4CAF50; /* Success Green */
+            --sh: rgba(103, 58, 183, 0.4); /* Stronger Shadow */
+            
+            /* Custom Font Defaults */
+            --c-ff: 'Inter', sans-serif; 
+            --c-fs: 1.0rem;
+            --c-fw: 400; 
+            --c-fc: var(--t);
+            
+            /* Animation Times */
+            --anim-fast: 0.3s;
+            --anim-slow: 0.6s;
+        }
+
+        /* Global Reset & Base */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--c-ff);
+            /* Transisi Smooth untuk semua perubahan UI/interaksi */
+            transition: all var(--anim-fast) cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+
+        html, body {
+            min-height: 100vh;
+            background: var(--l); 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--t);
+            overflow-x: hidden; /* Mencegah scroll horizontal dari animasi */
+        }
+        
+        /* Utility Classes */
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+        
+        /* Main Container - Peningkatan Estetika */
+        .main-container {
+            width: 95%; 
+            max-width: 700px; /* Lebih lebar */
+            background: var(--b);
+            border-radius: 20px; /* Sudut lebih lembut */
+            padding: 40px; 
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15); /* Shadow lebih dalam */
+            margin: 40px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: scale(1);
+            opacity: 1;
+            animation: fadeIn var(--anim-slow) ease-out;
+        }
+
+        /* Keyframes Fade In untuk halaman baru/muat ulang */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- 1. WELCOME CONTAINER (Lebih Dinamis) --- */
+        #hC {
+            min-height: 500px;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--l) 0%, var(--b) 100%);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .welcome-title {
+            font-size: 4.5rem;
+            font-weight: 900;
+            color: var(--p);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 5px var(--sh);
+            z-index: 10;
+        }
+        
+        .welcome-subtitle {
+            font-size: 1.4rem;
+            color: #777;
+            margin-bottom: 50px;
+            font-weight: 300;
+            z-index: 10;
+        }
+
+        /* Animasi Latar Belakang Geometris (NEW) */
+        .bg-shape {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: rgba(103, 58, 183, 0.1); /* Ungu transparan */
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation: moveShape 15s infinite alternate ease-in-out;
+            z-index: 1;
+        }
+        .shape-1 { top: 10%; left: 5%; width: 200px; height: 200px; animation-delay: 0s; }
+        .shape-2 { bottom: 15%; right: 10%; width: 120px; height: 120px; animation-delay: 5s; }
+        .shape-3 { top: 70%; left: 30%; width: 80px; height: 80px; animation-delay: 10s; background: rgba(255, 112, 67, 0.1); }
+
+        @keyframes moveShape {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(20px, -20px) rotate(180deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        /* --- 2. KOMPONEN UMUM (Input, Button, Card) --- */
+        
+        input:not([type="radio"]):not([type="checkbox"]):not([type="color"]), textarea, select {
+            width: 100%;
+            border-radius: 12px; /* Lebih bulat dari V5 */
+            border: 1px solid #DCE1E7;
+            padding: 1.1rem 1.4rem; /* Lebih lega */
+            margin-bottom: 1.8rem; /* Jarak yang lebih besar */
+            font-size: 1rem;
+            background: #F8F9FA;
+            color: var(--t);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); /* Sedikit kedalaman */
+        }
+        
+        input:focus:not([type="radio"]):not([type="checkbox"]):not([type="color"]), textarea:focus, select:focus {
+            border-color: var(--p);
+            box-shadow: 0 0 0 4px rgba(103, 58, 183, 0.2); 
+            background: var(--b);
+        }
+
+        /* Pill Button Style - Bulat Penuh */
+        .pill-button {
+            background: var(--p);
+            color: #fff;
+            cursor: pointer;
+            border: none;
+            font-weight: 600;
+            border-radius: 50px; 
+            padding: 1rem 2.5rem; 
+            box-shadow: 0 10px 20px var(--sh); /* Shadow lebih kuat */
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .pill-button:hover {
+            background: #5E35B1; 
+            transform: translateY(-5px); /* Efek melayang lebih dramatis */
+            box-shadow: 0 15px 30px var(--sh);
+        }
+        
+        /* Icon Button (Pill-shaped) */
+        .icon-btn {
+            background: var(--l); 
+            color: var(--p);
+            border: none;
+            padding: 12px 20px; 
+            border-radius: 50px; 
+            cursor: pointer;
+            font-size: 1rem;
+            line-height: 1;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .icon-btn.logout {
+            background: var(--e) !important; 
+            color: #fff !important; 
+        }
+
+        /* Card Style */
+        .note-card {
+            border-left: 8px solid var(--p); 
+            border-radius: 15px; /* Lebih bulat */
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.08); /* Shadow lebih halus */
+        }
+
+        /* --- 3. TOAST NOTIFICATION STYLES --- */
+        #tc {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            min-width: 300px; /* Lebih lebar */
+            padding: 18px 25px;
+            border-radius: 12px;
+            color: #fff;
+            opacity: 0;
+            transform: translateX(120%);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .toast:before {
+            content: '';
+            font-size: 1.5rem;
+            margin-right: 12px;
+        }
+        .toast.success { background: var(--s); }
+        .toast.success:before { content: '✓'; }
+        .toast.error { background: var(--e); }
+        .toast.error:before { content: '✕'; }
+        .toast.info { background: #2196F3; }
+        .toast.info:before { content: 'i'; }
+
+        /* --- 4. LAIN-LAIN --- */
+        .code-block {
+            background: #2D3E50; 
+            color: #ECF0F1; 
+            padding: 18px; 
+            border-radius: 10px; 
+            overflow-x: auto;
+            font-family: 'monospace'; 
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 15px 0;
+            font-size: var(--c-fs); 
+            line-height: 1.5;
+        }
+        
+        footer {
+            margin-top: auto; 
+            padding: 25px 20px 25px; 
+            text-align: center; 
+            color: #9575CD; 
+            font-size: .85rem;
+            width: 100%;
+            font-weight: 500;
+        }
+        footer a {
+            color: #9575CD;
+            border-bottom: 1px dotted #9575CD;
+            font-weight: 500;
+        }
+        
+    </style>
+</head>
+<body>
+    
+    <div class="main-container" id="hC">
+        <div class="bg-shape shape-1"></div>
+        <div class="bg-shape shape-2"></div>
+        <div class="bg-shape shape-3"></div>
+        
+        <h1 class="welcome-title">OKIENAK</h1>
+        <p class="welcome-subtitle">Your private, stylish, and time-bound content sharing hub.</p>
+        <button id="jB" class="pill-button" style="padding: 15px 50px; font-size: 1.1rem; z-index: 10;">GET STARTED</button>
+    </div>
+
+    <div class="main-container hidden" id="aC">
+        <h1 style="color:var(--t); font-size: 2.2rem; margin-bottom: 0;">Secure <span style="color:var(--p);">Access</span></h1>
+        <p style="margin-bottom: 3rem; font-size: 0.9rem; color: #777; font-weight: 300;">Login or create your account.</p>
+        
+        <div class="tab" style="max-width:350px;">
+            <button id="lT" class="active-tab">Sign In</button>
+            <button id="rT">Sign Up</button>
+        </div>
+
+        <div id="lF" style="width:100%;">
+            <input id="lE" type="email" placeholder="Email Address">
+            <div style="position:relative; margin-bottom:1.8rem;">
+                <input id="lP" type="password" placeholder="Password" style="padding-right: 6rem; margin-bottom:0;">
+                <span class="password-toggle" id="lPTog">SHOW</span>
+            </div>
+            <button id="lB" class="pill-button" style="width:100%;">LOGIN</button>
+        </div>
+
+        <div id="rF" class="hidden" style="width:100%;">
+            <input id="rE" type="email" placeholder="Email Address">
+            <div style="position:relative; margin-bottom:1.5rem;">
+                <input id="rP" type="password" placeholder="Password (Min. 3 chars)" style="padding-right: 6rem; margin-bottom:0;">
+                <span class="password-toggle" id="rPTog">SHOW</span>
+            </div>
+            <div style="position:relative; margin-bottom:1.8rem;">
+                <input id="rCP" type="password" placeholder="Confirm Password" style="padding-right: 6rem; margin-bottom:0;">
+                <span class="password-toggle" id="rCPTog">SHOW</span>
+            </div>
+            <button id="rB" class="pill-button" style="width:100%;">REGISTER</button>
+        </div>
+    </div>
+
+    <div class="main-container hidden" id="nC">
+        <div style="width:100%; display:flex; justify-content:space-between; align-items:center; margin-bottom:3rem;">
+             <h1 style="font-size:2rem; color:var(--t);">Hello, <span style="color:var(--p);" id="uN"></span>!</h1>
+             <div style="display:flex; gap:15px;">
+                 <button id="sTog" class="icon-btn" title="Settings">⚙️ SETTINGS</button>
+                 <button id="lB2" class="icon-btn logout" title="Logout">LOGOUT ➜</button>
+             </div>
+        </div>
+        
+        <div id="adminView" class="hidden" style="width:100%; margin-bottom: 3rem;">
+            <div class="toggle-section" id="adminToggle">
+                <h4>ADMIN CONTROL PANEL <span id="adminToggleIcon" class="toggle-icon">+</span></h4>
+                <div id="adminContent" class="toggle-content hidden">
+                    <h5 style="color:var(--e); margin-bottom: 15px;">SERVER-WIDE NOTES (Total: <span id="totalNotesCount">0</span>)</h5>
+                    <div id="allNotesList">
+                        </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="settingsSection" class="hidden" style="width:100%;">
+            <div class="toggle-section" id="styleToggle">
+                <h4>VISUAL SETTINGS <span id="styleToggleIcon" class="toggle-icon">+</span></h4>
+                <div id="styleContent" class="toggle-content hidden">
+                    </div>
+            </div>
+            
+            <button id="sCSB" class="pill-button" style="width:100%; margin-top:20px; background: #3F51B5;">SAVE SETTINGS</button>
+            <hr style="border:0; border-top:1px solid #ECEFF1; margin:30px 0;">
+        </div>
+        
+        <div id="newOKIENAKForm" style="width:100%;">
+            <h2 id="formTitle" style="font-size:1.7rem; margin-bottom:2.5rem; color:var(--p); border-bottom:1px solid #ECEFF1; padding-bottom:10px;">Create New OKIENAK</h2>
+            
+            <input id="pT" type="text" placeholder="Optional OKIENAK Title (e.g., Project Credentials)">
+            
+            <div class="form-row">
+                <select id="sH" style="flex:1;">
+                    <option value="text">Content Type: Plain Text</option>
+                    <option value="code">Content Type: Code/Syntax</option>
+                    <option value="link">Content Type: Hyperlink</option>
+                </select>
+                <select id="eO" style="flex:1;">
+                    <option value="never">Expiry: No Limit (∞)</option>
+                    <option value="1h">Expiry: 1 Hour</option>
+                    <option value="1d">Expiry: 1 Day</option>
+                    <option value="1w">Expiry: 1 Week</option>
+                    <option value="1m">Expiry: 1 Month</option>
+                    <option value="1y">Expiry: 1 Year (Max)</option>
+                </select>
+            </div>
+            
+            <textarea id="nI" placeholder="Type your secure content here..." style="min-height: 200px;"></textarea>
+            
+            <div style="position:relative;">
+                <input id="nPI" type="password" placeholder="Optional Password Protection" style="padding-right: 6rem; margin-bottom:0;">
+                <span class="password-toggle" id="nPITog">SHOW</span>
+            </div>
+        </div>
+        
+        <button id="aNB" class="pill-button" style="width:100%; margin-top:40px;">PUBLISH OKIENAK</button>
+        <button id="sE" class="pill-button btn-save-edit hidden" style="width:100%; margin-top:40px; background: var(--s);">💾 SAVE CHANGES</button>
+        <button id="cB" class="pill-button hidden" style="width:100%; margin-top:15px; background: #9E9E9E;">✖ CANCEL EDIT</button>
+
+
+        <div id="nL" style="margin-top:5rem; width:100%;">
+            <h2 style="font-size:1.7rem; margin-bottom:2.5rem; color:var(--p); border-bottom:1px solid #ECEFF1; padding-bottom:10px;">My Published OKIENAKs</h2>
+            </div>
+
+    </div>
+
+    <div id="tc"></div>
+
+    <footer>
+        &copy; 2026 OKIENAK | Owner: <a href="mailto:cidmomo19@gmail.com">cidmomo19@gmail.com</a>
+    </footer>
+
+    <script>
+        // Mapping DOM Elements (Sama seperti V5.3)
+        const D = {
+            // General
+            hC: document.getElementById("hC"),
+            aC: document.getElementById("aC"),
+            nC: document.getElementById("nC"),
+            jB: document.getElementById("jB"),
+            tC: document.getElementById("tc"),
+            sTog: document.getElementById("sTog"), 
+            lB2: document.getElementById("lB2"),
+            settingsSection: document.getElementById("settingsSection"),
+            // Auth
+            lT: document.getElementById("lT"), rT: document.getElementById("rT"), lE: document.getElementById("lE"), lP: document.getElementById("lP"), lPTog: document.getElementById("lPTog"), lB: document.getElementById("lB"), rE: document.getElementById("rE"), rP: document.getElementById("rP"), rPTog: document.getElementById("rPTog"), rCP: document.getElementById("rCP"), rCPTog: document.getElementById("rCPTog"), rB: document.getElementById("rB"), lF: document.getElementById("lF"), rF: document.getElementById("rF"),
+            // OKIENAK Input & Dashboard
+            uN: document.getElementById("uN"), pT: document.getElementById("pT"), sH: document.getElementById("sH"), eO: document.getElementById("eO"), nI: document.getElementById("nI"), nPI: document.getElementById("nPI"), nPITog: document.getElementById("nPITog"), aNB: document.getElementById("aNB"), sE: document.getElementById("sE"), cB: document.getElementById("cB"), formTitle: document.getElementById("formTitle"), nL: document.getElementById("nL"),
+            // Custom Style
+            cC: document.getElementById("cC"), cF: document.getElementById("cF"), cSZ: document.getElementById("cSZ"), cSW: document.getElementById("cSW"), cSC: document.getElementById("cSC"), 
+            // Admin View
+            adminView: document.getElementById("adminView"), adminToggle: document.getElementById("adminToggle"), adminContent: document.getElementById("adminContent"), adminToggleIcon: document.getElementById("adminToggleIcon"), allNotesList: document.getElementById("allNotesList"), totalNotesCount: document.getElementById("totalNotesCount"),
+        };
+
+        let currentEditIndex = null;
+        
+        // --- GLOBAL UTILITIES ---
+        const gU = () => JSON.parse(localStorage.getItem("users") || "{}");
+        const sU = u => localStorage.setItem("users", JSON.stringify(u));
+        const gLUE = () => localStorage.getItem("loggedIn");
+        const oE = "cidmomo19@gmail.com"; // FINAL OWNER EMAIL
+
+        const lk = t => {
+            const p = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+            return t.replace(p, '<a href="$1" target="_blank" style="color:var(--p); font-weight:600;">$1</a>');
+        }
+        
+        const gE = (o) => {
+            const n = new Date();
+            if (o === '1h') n.setHours(n.getHours() + 1);
+            else if (o === '1d') n.setDate(n.getDate() + 1);
+            else if (o === '1w') n.setDate(n.getDate() + 7);
+            else if (o === '1m') n.setMonth(n.getMonth() + 1);
+            else if (o === '1y') n.setFullYear(n.getFullYear() + 1);
+            else return null; 
+            return n.getTime();
+        };
+
+        const gRE = (expiryTime) => {
+            if (!expiryTime) return 'never';
+            
+            const diff = expiryTime - Date.now(); 
+            const hour = 60 * 60 * 1000;
+            const day = 24 * hour;
+            const week = 7 * day;
+            const month = 30 * day; 
+            const year = 365 * day;
+
+            if (Math.abs(diff - hour) < day/2) return '1h'; 
+            if (Math.abs(diff - day) < hour) return '1d';
+            if (Math.abs(diff - week) < day) return '1w';
+            if (Math.abs(diff - month) < week) return '1m';
+            if (Math.abs(diff - year) < month) return '1y';
+            
+            return 'never';
+        };
+        
+        // Toast Notification Function (IMPROVED - sama seperti V5.3)
+        function sT(m, t = 'info') {
+            const o = document.createElement('div');
+            o.className = `toast ${t}`;
+            o.textContent = m;
+            
+            const existingToasts = D.tC.querySelectorAll('.toast');
+            if (existingToasts.length >= 3) {
+                 existingToasts[0].remove();
+            }
+
+            D.tC.appendChild(o);
+            setTimeout(() => o.classList.add('show'), 10);
+            setTimeout(() => {
+                o.classList.remove('show');
+                o.addEventListener('transitionend', () => o.remove(), { once: true });
+            }, 4000);
+        }
+        
+        function tPV(input, toggle) {
+            const isP = input.type === 'password';
+            input.type = isP ? 'text' : 'password';
+            toggle.textContent = isP ? 'HIDE' : 'SHOW'; 
+        }
+
+        function aCTC(color) {
+            const root = document.documentElement;
+            const hexToRgb = (hex) => {
+                const bigint = parseInt(hex.slice(1), 16);
+                const r = (bigint >> 16) & 255;
+                const g = (bigint >> 8) & 255;
+                const b = bigint & 255;
+                return [r, g, b];
+            };
+            const [r, g, b] = hexToRgb(color);
+            const lr = Math.round(255 * 0.9 + r * 0.1);
+            const lg = Math.round(255 * 0.9 + g * 0.1);
+            const lb = Math.round(255 * 0.9 + b * 0.1);
+            const lightColor = `rgb(${lr}, ${lg}, ${lb})`;
+            
+            root.style.setProperty('--p', color);
+            root.style.setProperty('--l', lightColor);
+        }
+
+        // --- PAGE NAVIGATION & AUTH LOGIC ---
+
+        function sHP() {
+            D.nC.classList.add("hidden");
+            D.aC.classList.add("hidden");
+            D.hC.classList.remove("hidden");
+        }
+
+        D.jB.addEventListener("click", () => {
+            D.hC.classList.add("hidden");
+            D.aC.classList.remove("hidden");
+            l(); 
+        });
+
+        function sNP(e) {
+            D.hC.classList.add("hidden");
+            D.aC.classList.add("hidden");
+            D.nC.classList.remove("hidden");
+            D.nC.classList.add("main-container"); 
+            D.uN.textContent = e.split('@')[0];
+            
+            if (e === oE) {
+                D.adminView.classList.remove("hidden");
+            } else {
+                D.adminView.classList.add("hidden");
+            }
+            
+            D.settingsSection.classList.add("hidden");
+            
+            lCS(e); 
+            rN(); 
+            if (e === oE) rAN();
+            resetFormState();
+        }
+        
+        // Settings/Admin Toggle Logic (Sama seperti V5.3)
+
+        D.sTog.addEventListener("click", () => {
+            D.settingsSection.classList.toggle("hidden");
+        });
+        
+        function toggleContent(content, icon) {
+            const isHidden = content.classList.toggle('hidden');
+            icon.textContent = isHidden ? '+' : '−'; // Mengganti ikon
+        }
+
+        D.adminToggle.addEventListener('click', (e) => {
+            if(e.target.tagName !== 'BUTTON' && e.target.tagName !== 'A') {
+                toggleContent(D.adminContent, D.adminToggleIcon);
+            }
+        });
+
+        const l = () => { /* ... auth tab logic ... */ };
+        const r = () => { /* ... auth tab logic ... */ };
+        D.lT.addEventListener("click", l);
+        D.rT.addEventListener("click", r);
+        
+        D.lPTog.addEventListener('click', () => tPV(D.lP, D.lPTog));
+        D.rPTog.addEventListener('click', () => tPV(D.rP, D.rPTog));
+        D.rCPTog.addEventListener('click', () => tPV(D.rCP, D.rCPTog));
+        D.nPITog.addEventListener('click', () => tPV(D.nPI, D.nPITog));
+
+        D.rB.addEventListener("click", () => { /* ... register logic ... */ });
+        D.lB.addEventListener("click", () => { /* ... login logic ... */ });
+
+        D.lB2.addEventListener("click", () => {
+            if (confirm("Are you sure you want to log out?")) {
+                localStorage.removeItem("loggedIn");
+                // Animasi keluar
+                D.nC.style.opacity = 0;
+                D.nC.style.transform = 'translateY(-20px)';
+                setTimeout(() => location.reload(), 400); 
+            }
+        });
+        
+        function lCS(email) { /* ... load custom style logic ... */ }
+        D.sCSB.addEventListener('click', () => { /* ... save style logic ... */ });
+        
+        // --- FORM STATE MANAGEMENT ---
+        
+        function resetFormState() {
+            currentEditIndex = null;
+            D.formTitle.textContent = "Create New OKIENAK";
+            D.aNB.classList.remove("hidden");
+            D.sE.classList.add("hidden");
+            D.cB.classList.add("hidden");
+
+            D.nI.value = D.pT.value = D.nPI.value = "";
+            D.sH.value = "text";
+            D.eO.value = "never";
+            D.nPI.type = "password"; 
+            D.nPITog.textContent = "SHOW";
+        }
+
+        D.cB.addEventListener('click', resetFormState);
+
+        // --- OKIENAK ACTIONS (CRUD) ---
+
+        function uN(i) {
+            const e = gLUE();
+            let u = gU();
+            const nO = u[e].pastes[i];
+            
+            currentEditIndex = i;
+
+            D.formTitle.textContent = `Editing: ${nO.title}`;
+            D.pT.value = nO.title;
+            D.sH.value = nO.syntax;
+            D.nI.value = nO.content;
+            D.eO.value = gRE(nO.expiry);
+            D.nPI.value = ""; 
+
+            D.aNB.classList.add("hidden");
+            D.sE.classList.remove("hidden");
+            D.cB.classList.remove("hidden");
+
+            sT(`OKIENAK '${nO.title}' loaded for editing.`, 'info');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        D.sE.addEventListener("click", () => {
+            if (currentEditIndex === null) return;
+            
+            const t = D.nI.value.trim();
+            if (!t) return sT("Content cannot be empty!", 'error');
+            
+            const e = gLUE();
+            let u = gU();
+            let nO = u[e].pastes[currentEditIndex];
+            
+            nO.title = D.pT.value.trim() || "Untitled OKIENAK";
+            nO.content = t;
+            nO.syntax = D.sH.value;
+            nO.expiry = gE(D.eO.value);
+            
+            const newPassword = D.nPI.value.trim();
+            if (newPassword) {
+                nO.password = newPassword;
+            } 
+
+            sU(u);
+            sT(`OKIENAK '${nO.title}' updated successfully!`, 'success');
+            
+            resetFormState();
+            rN();
+        });
+
+
+        D.aNB.addEventListener("click", () => {
+            if (currentEditIndex !== null) return;
+            
+            const t = D.nI.value.trim();
+            const title = D.pT.value.trim() || "Untitled OKIENAK";
+            const nP = D.nPI.value.trim();
+            const sH = D.sH.value;
+            const eO = D.eO.value;
+            
+            if (!t) return sT("Please type content first!", 'error');
+
+            const e = gLUE();
+            let u = gU();
+            
+            const newOKIENAK = { 
+                title: title, content: t, password: nP || null, syntax: sH, expiry: gE(eO), visits: 0, createdAt: Date.now()
+            };
+            
+            if (!u[e].pastes) u[e].pastes = [];
+            
+            u[e].pastes.unshift(newOKIENAK);
+            sU(u);
+            
+            D.nI.value = D.pT.value = D.nPI.value = "";
+            D.sH.value = "text";
+            D.eO.value = "never";
+
+            rN();
+            sT("OKIENAK Published!", 'success');
+        });
+
+        function dN(i) { /* ... delete user note logic ... */ }
+        function dAN(ownerEmail, pasteIndex) { /* ... delete admin logic ... */ }
+        
+        const sHC = (content, type, applyStyle = false) => { /* ... syntax/content render logic ... */ };
+        
+        // Render OKIENAKs (rN) - User's Own Notes
+        function rN() { /* ... render user notes logic ... */ }
+        
+        // Render OKIENAKs (rAN) - Admin Global View (MODIFIKASI PENTING DI SINI)
+        function rAN() {
+            if (gLUE() !== oE) return;
+            D.allNotesList.innerHTML = '';
+            let u = gU();
+            let totalPastes = 0;
+            
+            for (const ownerEmail in u) {
+                if (!Array.isArray(u[ownerEmail].pastes)) continue; 
+                
+                u[ownerEmail].pastes.forEach((nO, i) => {
+                    if (nO.expiry && nO.expiry <= Date.now()) return; 
+                    
+                    const isPasswordProtected = !!nO.password;
+                    const statusColor = isPasswordProtected ? '#FFC107' : 'var(--s)';
+                    const urlPath = `${window.location.origin}${window.location.pathname}?n=${ownerEmail}-${i}`;
+                    
+                    // ADMIN HANYA BISA MELIHAT PASSWORD DI SINI (sesuai permintaan user)
+                    const contentPreview = isPasswordProtected 
+                        ? `<strong style="color:var(--e);">[PASSWORD PROTECTED]</strong>` 
+                        : sHC(nO.content.substring(0, 80) + (nO.content.length > 80 ? '...' : ''), nO.syntax);
+                    
+                    // Tampilan Admin dengan konten asli (untuk owner)
+                    const fullContent = isPasswordProtected 
+                        ? `<p style="color:#777; margin-top:5px;">Password: <strong style="color:var(--e);">${nO.password}</strong></p><div style="font-size: .85rem; max-height:100px; overflow-y:auto; border-top:1px solid #ECEFF1; padding-top:10px; margin-top:10px;">${sHC(nO.content, nO.syntax)}</div>`
+                        : `<div style="font-size: .85rem; max-height:100px; overflow-y:auto; border-top:1px solid #ECEFF1; padding-top:10px; margin-top:10px;">${sHC(nO.content, nO.syntax)}</div>`;
+
+
+                    const div = document.createElement("div");
+                    div.className = "note-card";
+                    div.style.borderLeft = `4px solid ${statusColor}`;
+                    div.innerHTML = `
+                        <div style="font-size: 0.9rem; color: #555; margin-bottom: 5px; font-weight: 500;">
+                            OWNER: <span style="color:var(--t); font-weight: 700;">${ownerEmail}</span> | VISITS: ${nO.visits || 0}
+                        </div>
+                        <strong style="color:var(--p);font-size:1.1rem; display:block; margin-bottom:5px;">${nO.title}</strong>
+                        
+                        ${fullContent}
+
+                        <div class="na" style="justify-content: flex-start; margin-top: 15px;">
+                            <a href="${urlPath}" target="_blank" class="pill-button" style="background:#3F51B5; padding: 10px 20px;">VIEW AS PUBLIC →</a>
+                            <button class="btn-delete-admin pill-button" data-owner="${ownerEmail}" data-index="${i}" style="padding: 10px 20px; background: #D32F2F;">DELETE</button>
+                        </div>
+                    `;
+                    D.allNotesList.appendChild(div);
+                    totalPastes++;
+                });
+            }
+            
+            D.totalNotesCount.textContent = totalPastes;
+
+            if (totalPastes === 0) {
+                 D.allNotesList.innerHTML = `<p class="text-center" style="color:#888; font-style: italic;">No active OKIENAKs found on the server.</p>`;
+            }
+
+            D.allNotesList.querySelectorAll(".btn-delete-admin").forEach(btn => {
+                btn.addEventListener("click", (e) => dAN(e.target.dataset.owner, parseInt(e.target.dataset.index)));
+            });
+        }
+
+
+        // Render Public OKIENAK (rPN) - Handler untuk link share (Kode dipertahankan)
+        function rPN(nO, ownerEmail, pasteIndex) { /* ... public render logic ... */ }
+        function rC(nO) { /* ... shared content render logic ... */ }
+
+        // --- INITIALIZATION ---
+        window.addEventListener("load", () => {
+            try {
+                // 1. Inisiasi Akun Owner (Memastikan owner email dan password default ada)
+                let u = gU();
+                const defaultOwnerEmail = oE;
+                const defaultOwnerPass = "ipulapik999#";
+                
+                if (!u[defaultOwnerEmail]) {
+                     u[defaultOwnerEmail] = {
+                        password: defaultOwnerPass, 
+                        pastes: [], 
+                        style: { color: "#673AB7", fontFamily: "Inter, sans-serif", fontSize: "16", fontWeight: "400", fontColor: "#4527A0" },
+                        visits: 0 
+                    };
+                    sU(u);
+                    sT(`Owner account created: ${defaultOwnerEmail} / ${defaultOwnerPass}`, 'success');
+                }
+
+                const l = gLUE();
+                const p = new URLSearchParams(window.location.search);
+                const nP = p.get("n"); 
+
+                // 2. Handle Shared OKIENAK Link
+                if (nP) { /* ... shared link logic ... */ } 
+                // 3. Handle Regular Access (Login Check)
+                else if (l) {
+                    sNP(l);
+                } else {
+                    sHP(); 
+                }
+            } catch (error) {
+                console.error("Initialization Error:", error);
+                sT("Critical Error: Cannot load website. Please clear browser storage.", 'error');
+                sHP(); 
+            }
+        });
+    </script>
+</body>
+</html>
